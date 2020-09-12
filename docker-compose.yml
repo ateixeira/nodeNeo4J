@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  neo4j:
+    image: neo4j:4.1
+    ports:
+      - 7474:7474
+      - 6477:6477
+      - 7687:7687
