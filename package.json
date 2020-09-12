@@ -31,6 +31,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
+    "neo4j-data-migrations": "^2.0.3",
     "neo4j-driver": "^4.1.2"
   }
 }
