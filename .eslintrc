@@ -4,9 +4,9 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "airbnb",
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
+    // "eslint:recommended",
+    // "plugin:@typescript-eslint/eslint-recommended",
+    // "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
   "settings": {
@@ -21,7 +21,19 @@
     }
   },
   "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/member-ordering": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/prefer-function-type": "error",
+    "@typescript-eslint/quotes": ["error", "single"],
+    "@typescript-eslint/unified-signatures": "error",
+    "@typescript-eslint/unbound-method": "off",
+    "import/no-unresolved": "off",
     "no-console": 1,
+    "no-shadow": 0,
     "prettier/prettier": 2,
     "import/prefer-default-export": 0,
     "import/extensions": 0

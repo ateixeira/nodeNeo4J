@@ -16,6 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.10.1",
+    "@types/pino": "^6.3.0",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "eslint": "^7.8.1",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "neo4j-data-migrations": "^2.0.3",
-    "neo4j-driver": "^4.1.2"
+    "neo4j-driver": "^4.1.2",
+    "pino": "^6.6.0"
   }
 }

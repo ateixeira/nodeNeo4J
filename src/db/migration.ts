@@ -1,6 +1,8 @@
 import * as neo4j from 'neo4j-driver';
+import { LogLevel } from '../logger/log-level.type';
 import driver from './index';
 import seedData from './seed.json';
+import { PinoLoggerService } from '../logger/logger';
 
 type DataNode = {
   name: string;
@@ -28,9 +30,12 @@ class Migrations {
 
   private readonly seedData: DataTree;
 
+  private readonly logger: any;
+
   constructor() {
     this.session = driver.session();
     this.seedData = seedData;
+    this.logger = new PinoLoggerService(LogLevel.Info);
   }
 
   private buildCreationStatements(data?: DataTree) {
@@ -68,6 +73,7 @@ class Migrations {
         count: result?.records.length || 0
       });
     } catch (e) {
+      this.logger.error(e.message);
       return Promise.reject(new Error(e.message));
     }
   }
@@ -89,6 +95,7 @@ class Migrations {
         count: result?.records.length || 0
       });
     } catch (e) {
+      this.logger.error(e.message);
       return Promise.reject(new Error(e.message));
     }
   }
@@ -96,11 +103,9 @@ class Migrations {
   public async run() {
     try {
       const deleteData = await this.removeData();
-      // eslint-disable-next-line no-console
-      console.info(deleteData);
+      this.logger.info(deleteData);
       const loadData = await this.loadSeedData();
-      // eslint-disable-next-line no-console
-      console.info(loadData);
+      this.logger.info(loadData);
     } finally {
       await this.session.close();
       await driver.close();
