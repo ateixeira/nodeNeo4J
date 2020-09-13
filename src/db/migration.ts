@@ -1,5 +1,4 @@
 import * as neo4j from 'neo4j-driver';
-import { QueryResult } from 'neo4j-driver';
 import driver from './index';
 import seedData from './seed.json';
 
@@ -19,6 +18,11 @@ type LoadDataResult = {
   count: number;
 };
 
+type RemoveDataResult = {
+  success: boolean;
+  count: number;
+};
+
 class Migrations {
   private readonly session: neo4j.Session;
 
@@ -29,12 +33,15 @@ class Migrations {
     this.seedData = seedData;
   }
 
-  private buildCreationStatements() {
+  private buildCreationStatements(data?: DataTree) {
     const createNodeStatements: string[] = [];
     const createRelationshipsStatements: string[] = [];
     const newNodesList: string[] = [];
 
-    this.seedData.data.reverse().map(
+    // TODO: May be useful for future test implementation
+    const dataSource = !data ? this.seedData : data;
+
+    dataSource.data.reverse().map(
       async (node): Promise<void> => {
         const nodeTag = `node${node.name.replace(/-/g, '')}`;
         const nodeParent = `node${node.parent}`;
@@ -52,38 +59,52 @@ class Migrations {
     return [createNodeStatements, createRelationshipsStatements, newNodesList];
   }
 
-  private async loadSeedData(entry?: DataTree): Promise<LoadDataResult> {
+  private async removeData(): Promise<RemoveDataResult> {
+    let result;
+    try {
+      result = await this.session.run('MATCH (n) DETACH DELETE n');
+      return Promise.resolve({
+        success: true,
+        count: result?.records.length || 0
+      });
+    } catch (e) {
+      return Promise.reject(new Error(e.message));
+    }
+  }
+
+  private async loadSeedData(data?: DataTree): Promise<LoadDataResult> {
+    let result;
     const [
       createNodeStatements,
       createRelationshipsStatements,
       newNodesList
-    ] = this.buildCreationStatements();
+    ] = this.buildCreationStatements(data);
 
-    const session = driver.session();
-    let result;
-    let success = true;
     try {
       result = await this.session.run(
         `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:isChildOf]-() RETURN relations`
       );
+      return Promise.resolve({
+        success: true,
+        count: result?.records.length || 0
+      });
     } catch (e) {
-      success = false;
-      // eslint-disable-next-line no-console
-      console.error('ERROR: ', e);
-    } finally {
-      await session.close();
-      await driver.close();
+      return Promise.reject(new Error(e.message));
     }
-
-    return Promise.resolve({
-      success,
-      count: result?.records.length || 0
-    });
   }
 
   public async run() {
-    const loadData = await this.loadSeedData();
-    console.info(loadData);
+    try {
+      const deleteData = await this.removeData();
+      // eslint-disable-next-line no-console
+      console.info(deleteData);
+      const loadData = await this.loadSeedData();
+      // eslint-disable-next-line no-console
+      console.info(loadData);
+    } finally {
+      await this.session.close();
+      await driver.close();
+    }
   }
 }
 
