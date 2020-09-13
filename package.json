@@ -9,7 +9,8 @@
     "start": "npm run build && node build/index.js",
     "build": "rimraf ./build && tsc",
     "lint": "eslint . --ext .ts --fix",
-    "prettify": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "migrate": "ts-node ./src/db/migration.ts"
   },
   "author": "André Teixeira",
   "license": "ISC",
