@@ -1,13 +1,14 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "jest"],
   "extends": [
     "airbnb",
     // "eslint:recommended",
     // "plugin:@typescript-eslint/eslint-recommended",
     // "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
+    "plugin:jest/recommended"
   ],
   "settings": {
     "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
@@ -34,8 +35,12 @@
     "import/no-unresolved": "off",
     "no-console": 1,
     "no-shadow": 0,
+    "no-unused-vars": 0,
     "prettier/prettier": 2,
     "import/prefer-default-export": 0,
     "import/extensions": 0
+  },
+  "env": {
+    "jest/globals": true
   }
 }
