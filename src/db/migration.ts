@@ -1,39 +1,16 @@
 import * as neo4j from 'neo4j-driver';
 import { LogLevel } from '../logger/log-level.type';
-import driver from './index';
+import { Neo4j } from './index';
 import seedData from './seed.json';
 import { PinoLoggerService } from '../logger/logger';
+import { DataTree, LoadDataResult, RemoveDataResult } from './migration.types';
 
-type DataNode = {
-  name: string;
-  description: string;
-  parentId?: string;
-  parent?: string;
-};
-
-type DataTree = {
-  data: DataNode[];
-};
-
-type LoadDataResult = {
-  success: boolean;
-  count: number;
-};
-
-type RemoveDataResult = {
-  success: boolean;
-  count: number;
-};
-
-class Migrations {
-  private readonly session: neo4j.Session;
-
+export class MigrationService {
   private readonly seedData: DataTree;
 
   private readonly logger: any;
 
   constructor() {
-    this.session = driver.session();
     this.seedData = seedData;
     this.logger = new PinoLoggerService(LogLevel.Info);
   }
@@ -64,17 +41,24 @@ class Migrations {
     return [createNodeStatements, createRelationshipsStatements, newNodesList];
   }
 
+  private exitSuccessfully = (result: neo4j.QueryResult) =>
+    Promise.resolve({
+      success: true,
+      count: result?.records.length || 0
+    });
+
+  private exitWithError = (e: Error) => {
+    this.logger.error(e.message);
+    return Promise.reject(new Error(e.message));
+  };
+
   private async removeData(): Promise<RemoveDataResult> {
     let result;
     try {
-      result = await this.session.run('MATCH (n) DETACH DELETE n');
-      return Promise.resolve({
-        success: true,
-        count: result?.records.length || 0
-      });
+      result = await Neo4j.execute('MATCH (n) DETACH DELETE n');
+      return this.exitSuccessfully(result);
     } catch (e) {
-      this.logger.error(e.message);
-      return Promise.reject(new Error(e.message));
+      return this.exitWithError(e);
     }
   }
 
@@ -87,16 +71,12 @@ class Migrations {
     ] = this.buildCreationStatements(data);
 
     try {
-      result = await this.session.run(
+      result = await Neo4j.execute(
         `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:isChildOf]-() RETURN relations`
       );
-      return Promise.resolve({
-        success: true,
-        count: result?.records.length || 0
-      });
+      return this.exitSuccessfully(result);
     } catch (e) {
-      this.logger.error(e.message);
-      return Promise.reject(new Error(e.message));
+      return this.exitWithError(e);
     }
   }
 
@@ -107,11 +87,10 @@ class Migrations {
       const loadData = await this.loadSeedData();
       this.logger.info(loadData);
     } finally {
-      await this.session.close();
-      await driver.close();
+      process.exit(0);
     }
   }
 }
 
-const migrations = new Migrations();
+const migrations = new MigrationService();
 migrations.run();
