@@ -3,6 +3,7 @@ version: '3'
 services:
   neo4j:
     image: neo4j:4.1
+    container_name: neo4j
     ports:
       - 7474:7474
       - 6477:6477
