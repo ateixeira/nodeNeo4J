@@ -8,11 +8,15 @@ import { Neo4j } from './db';
 
 // Controllers (route handlers)
 import * as homeController from './controllers/home';
+import * as apiController from './controllers/api';
 
 // Create Express server
 const app = express();
 
+const neo4j = new Neo4j({});
+
 // Express configuration
+app.set('neo4j', new Neo4j({ host: 'http://localhost:7896' }));
 app.set('port', process.env.PORT || 3009);
 app.engine(
   '.hbs',
@@ -43,5 +47,6 @@ app.use(
  * Routes
  */
 app.get('/', homeController.index);
+app.get('/api/tree', apiController.getTree);
 
 export default app;

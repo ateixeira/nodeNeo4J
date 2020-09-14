@@ -1,4 +1,5 @@
 export type DataNode = {
+  id: string;
   name: string;
   description: string;
   parentId?: string;
