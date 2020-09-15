@@ -13,8 +13,6 @@ import * as apiController from './controllers/api';
 // Create Express server
 const app = express();
 
-const neo4j = new Neo4j({});
-
 // Express configuration
 app.set('neo4j', new Neo4j({ host: 'http://localhost:7896' }));
 app.set('port', process.env.PORT || 3009);

@@ -10,9 +10,12 @@ export class MigrationService {
 
   private readonly logger: any;
 
+  private readonly neo4j: any;
+
   constructor() {
     this.seedData = seedData;
     this.logger = new PinoLoggerService(LogLevel.Info);
+    this.neo4j = new Neo4j({ host: 'http://localhost:7896' });
   }
 
   private buildCreationStatements(data?: DataTree) {
@@ -23,7 +26,7 @@ export class MigrationService {
     // TODO: May be useful for future test implementation
     const dataSource = !data ? this.seedData : data;
 
-    dataSource.data.reverse().map(
+    dataSource.data.map(
       async (node): Promise<void> => {
         const nodeTag = `node${node.name.replace(/-/g, '')}`;
         const nodeParent = `node${node.parent}`;
@@ -32,7 +35,7 @@ export class MigrationService {
         );
         if (node.parent) {
           createRelationshipsStatements.push(
-            `(${nodeTag})-[:isChildOf]->(${nodeParent})`
+            `(${nodeParent})-[:IS_CHILD]->(${nodeTag})`
           );
         }
         newNodesList.push(nodeTag);
@@ -55,7 +58,7 @@ export class MigrationService {
   private async removeData(): Promise<RemoveDataResult> {
     let result;
     try {
-      result = await Neo4j.execute('MATCH (n) DETACH DELETE n');
+      result = await this.neo4j.execute('MATCH (n) DETACH DELETE n');
       return this.exitSuccessfully(result);
     } catch (e) {
       return this.exitWithError(e);
@@ -71,8 +74,8 @@ export class MigrationService {
     ] = this.buildCreationStatements(data);
 
     try {
-      result = await Neo4j.execute(
-        `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:isChildOf]-() RETURN relations`
+      result = await this.neo4j.execute(
+        `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:IS_PARENT]-() RETURN relations`
       );
       return this.exitSuccessfully(result);
     } catch (e) {
