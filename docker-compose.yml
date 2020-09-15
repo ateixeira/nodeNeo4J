@@ -5,6 +5,11 @@ services:
     image: neo4j:4.1
     container_name: neo4j
     ports:
-      - 7474:7474
-      - 6477:6477
-      - 7687:7687
+      - 17474:7474
+      - 17687:7687
+  neo4j_test:
+    image: neo4j:4.1
+    container_name: neo4j_test
+    ports:
+      - 27474:7474
+      - 27687:7687
