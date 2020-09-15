@@ -22,11 +22,11 @@ app.engine(
   handlebars({
     defaultLayout: 'index',
     extname: '.hbs',
-    layoutsDir: path.join(__dirname, '../../views')
+    layoutsDir: path.join(__dirname, '../views')
   })
 );
 app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, '../../views'));
+app.set('views', path.join(__dirname, '../views'));
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
