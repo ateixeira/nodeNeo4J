@@ -4,6 +4,7 @@ import { Neo4j } from './index';
 import seedData from './seed.json';
 import { PinoLoggerService } from '../logger/logger';
 import { DataTree, LoadDataResult, RemoveDataResult } from './migration.types';
+import config from '../../config.json';
 
 export class MigrationService {
   private readonly seedData: DataTree;
@@ -15,7 +16,7 @@ export class MigrationService {
   constructor() {
     this.seedData = seedData;
     this.logger = new PinoLoggerService(LogLevel.Info);
-    this.neo4j = new Neo4j({ host: 'http://localhost:7896' });
+    this.neo4j = new Neo4j(config.default);
   }
 
   private buildCreationStatements(data?: DataTree) {
@@ -35,7 +36,7 @@ export class MigrationService {
         );
         if (node.parent) {
           createRelationshipsStatements.push(
-            `(${nodeParent})-[:IS_CHILD]->(${nodeTag})`
+            `(${nodeParent})-[:IS_PARENT]->(${nodeTag})`
           );
         }
         newNodesList.push(nodeTag);

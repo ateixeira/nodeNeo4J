@@ -15,8 +15,15 @@ export class Neo4j {
   }
 
   private getDriver = (): Driver => {
-    return driver('bolt://localhost:7687/', auth.basic('neo4j', 'password'));
+    return driver(
+      this.config.uri,
+      auth.basic(this.config.user, this.config.password)
+    );
   };
+
+  private async cleanDB(): Promise<void> {
+    this.execute('MATCH (n) DETACH DELETE n');
+  }
 
   public async execute(request: string): Promise<neo4j.Result> {
     return this.session.run(request);

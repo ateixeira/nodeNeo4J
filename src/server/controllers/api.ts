@@ -12,7 +12,7 @@ export const getTree = async (
 ) => {
   const query: string = `
     MATCH (p:Node) 
-    OPTIONAL MATCH (p)-[:IS_CHILD]->(c)
+    OPTIONAL MATCH (p)-[:IS_PARENT]->(c)
     RETURN {name : p.name, description: p.description, child : collect( c.name)}
   `;
   const neo4jExec = req.app.get('neo4j');
