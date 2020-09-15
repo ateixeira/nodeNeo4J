@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import handlebars from 'express-handlebars';
 import { Neo4j } from './db';
-import config from '../config.json';
+import config from './config.json';
 
 // Controllers (route handlers)
 import * as homeController from './controllers/home';

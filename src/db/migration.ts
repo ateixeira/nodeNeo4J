@@ -4,7 +4,7 @@ import { Neo4j } from './index';
 import seedData from './seed.json';
 import { PinoLoggerService } from '../logger/logger';
 import { DataTree, LoadDataResult, RemoveDataResult } from './migration.types';
-import config from '../../config.json';
+import config from '../config.json';
 
 export class MigrationService {
   private readonly seedData: DataTree;

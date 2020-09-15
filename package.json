@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest",
-    "start": "ts-node src/server/server.ts",
+    "tstart": "ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
     "lint": "eslint . --ext .ts --fix",
     "prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "migrate": "ts-node ./src/server/db/migration.ts"
+    "migrate": "ts-node ./src/db/migration.ts"
   },
   "author": "André Teixeira",
   "license": "ISC",
@@ -22,6 +24,7 @@
     "@types/jest": "^26.0.13",
     "@types/node": "^14.10.1",
     "@types/pino": "^6.3.0",
+    "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "cross-env": "^7.0.2",
@@ -38,12 +41,13 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
+    "shelljs": "^0.8.4",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1"
   },
   "dependencies": {
-    "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
