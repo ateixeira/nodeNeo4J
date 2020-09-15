@@ -1,0 +1,12 @@
+{
+  "test": {
+    "user": "neo4j",
+    "password": "password",
+    "uri": "bolt://localhost:27687"
+  },
+  "default": {
+    "user": "neo4j",
+    "password": "password",
+    "uri": "bolt://localhost:17687"
+  }
+}
