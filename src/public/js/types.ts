@@ -3,4 +3,5 @@ export type NodeType = {
   description: string;
   parent: string;
   children: string[];
+  depth?: number;
 };
