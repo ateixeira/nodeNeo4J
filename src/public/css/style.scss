@@ -5,22 +5,33 @@ body {
 
 #app {
   display: flex;
-  // justify-content: flex-end;
+  justify-content: flex-end;
   height: 100%;
-  // .tree {
-  //   display: flex;
-  //   justify-content: end;
-  //   .column {
-  //     display: flex;
-  //     flex-direction: column;
-  //     justify-content: space-around;
-  //     padding: 0 3rem;
-  //     .node {
-  //       width: 130px;
-  //       height: 90px;
-  //       border: 1px solid black;
-  //       border-radius: 15px 50px;
-  //     }
-  //   }
-  // }
+  background-color: #f9f9f9;
+
+  li {
+    border: 2px solid;
+    list-style: none;
+    width: 90px;
+    height: 60px;
+    margin: 30px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 20px 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+  }
+
+  // li::after,
+  li {
+    &.has-child::before {
+      position: relative;
+      content: '';
+      height: 90px;
+      transition: width 1s, height 1s, border 0.01s 1s;
+      border-left: 2px solid #565656;
+      top: 71px;
+      right: 30px;
+    }
+  }
 }
