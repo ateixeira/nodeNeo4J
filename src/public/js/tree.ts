@@ -10,8 +10,11 @@ export class Tree extends Component {
 
   private readonly nodesMap: Map<string, NodeType>;
 
-  constructor(nodes: NodeType[]) {
+  private store;
+
+  constructor(nodes: NodeType[], store: any) {
     super();
+    this.store = store;
     this.element = document.createElement('ul');
     this.element.className = 'tree';
     this.nodes = nodes;
@@ -27,7 +30,7 @@ export class Tree extends Component {
   }
 
   private createNode(n: NodeType, target?: HTMLElement) {
-    const node = new TreeNode(n);
+    const node = new TreeNode(n, this.store);
     node.render(target || this.element);
     return node;
   }

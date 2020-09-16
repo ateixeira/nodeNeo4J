@@ -7,8 +7,11 @@ class TreeNode extends Component {
 
   readonly data: NodeType;
 
-  constructor(node: NodeType) {
+  private readonly store;
+
+  constructor(node: NodeType, store: any) {
     super();
+    this.store = store;
     this.data = node;
     this.element = document.createElement('ul');
     this.configNode();
@@ -19,6 +22,9 @@ class TreeNode extends Component {
     this.element.className = 'node';
     const nodeContent = document.createTextNode(this.data.name);
     nodeLi.appendChild(nodeContent);
+    nodeLi.addEventListener('click', () => {
+      this.store.selectNode(nodeLi);
+    });
     this.element.appendChild(nodeLi);
     if (this.data.children.length) {
       nodeLi.className = 'has-child';
