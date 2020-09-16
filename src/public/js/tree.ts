@@ -40,11 +40,16 @@ export class Tree extends Component {
     return !!node.data.children.length;
   }
 
+  private createColumn() {
+    const newColumn = document.createElement('div');
+    newColumn.className = 'column';
+    this.element.appendChild(newColumn);
+    return newColumn;
+  }
+
   private renderChildrenNodes(treeNode: TreeNode, depth: number = 1) {
     if (this.hasChildren(treeNode)) {
-      const newColumn = document.createElement('div');
-      newColumn.className = 'column';
-      this.element.appendChild(newColumn);
+      const newColumn = this.createColumn();
       treeNode.data.children.map((child: string) => {
         const childData = this.nodesMap.get(child);
         if (childData) {
@@ -57,9 +62,7 @@ export class Tree extends Component {
   }
 
   public renderTree() {
-    const baseColumn = document.createElement('div');
-    baseColumn.className = 'column';
-    this.element.appendChild(baseColumn);
+    const baseColumn = this.createColumn();
     const topNodes = this.findTopNodes().map((n: NodeType) => {
       return this.createNode(n, baseColumn);
     });
