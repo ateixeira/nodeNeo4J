@@ -20,8 +20,16 @@ export class Tree extends Component {
     node.render(this.element);
   }
 
+  private findParent(n: NodeType) {
+    return this.nodes.filter((e) => e.children.includes(n.name));
+  }
+
+  private findLeafs() {
+    return this.nodes.filter((e) => !e.children.length);
+  }
+
   public renderTree() {
-    this.nodes.map((n: NodeType) => {
+    this.findLeafs().map((n: NodeType) => {
       this.createNode(n);
     });
   }
