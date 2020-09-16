@@ -1,5 +1,6 @@
 import Api from './api';
 import { Tree } from './tree';
+import '../css/style.scss';
 
 const appElement = document.getElementById('app');
 

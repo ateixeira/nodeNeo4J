@@ -1,0 +1,16 @@
+#app {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#app .node {
+  width: 130px;
+  height: 90px;
+  border: 1px solid black;
+  border-radius: 15px 50px;
+}
+/*# sourceMappingURL=style.css.map */
