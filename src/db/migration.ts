@@ -32,11 +32,11 @@ export class MigrationService {
         const nodeTag = `node${node.name.replace(/-/g, '')}`;
         const nodeParent = `node${node.parent}`;
         createNodeStatements.push(
-          `(${nodeTag}:Node {name: "${node.name}", description: "${node.description}"})`
+          `(${nodeTag}:Node {name: "${node.name}", description: "${node.description}", parent: "${node.parent}"})`
         );
         if (node.parent) {
           createRelationshipsStatements.push(
-            `(${nodeParent})-[:IS_PARENT]->(${nodeTag})`
+            `(${nodeTag})-[:IS_CHILD]->(${nodeParent})`
           );
         }
         newNodesList.push(nodeTag);
@@ -76,7 +76,7 @@ export class MigrationService {
 
     try {
       result = await this.neo4j.execute(
-        `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:IS_PARENT]-() RETURN relations`
+        `CREATE ${createNodeStatements} CREATE ${createRelationshipsStatements} WITH ${newNodesList} MATCH relations=()-[:IS_CHILD]-() RETURN relations`
       );
       return this.exitSuccessfully(result);
     } catch (e) {

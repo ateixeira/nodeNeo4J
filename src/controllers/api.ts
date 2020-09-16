@@ -12,8 +12,8 @@ export const getTree = async (
 ) => {
   const query: string = `
     MATCH (p:Node) 
-    OPTIONAL MATCH (p)-[:IS_PARENT]->(c)
-    RETURN {name : p.name, description: p.description, child : collect( c.name)}
+    OPTIONAL MATCH (c)-[:IS_CHILD]->(p) 
+    RETURN {name : p.name, description: p.description, parent: p.parent, child: collect( c.name)}
   `;
   const neo4jExec = req.app.get('neo4j');
   const result = await neo4jExec.execute(query);
@@ -22,9 +22,9 @@ export const getTree = async (
     // eslint-disable-next-line dot-notation
     const data = r['_fields'][0];
     return {
-      // id: data.identity.low,
       name: data.name,
       description: data.description,
+      parent: data.parent === 'undefined' ? null : data.parent,
       children: data.child
     };
   });
