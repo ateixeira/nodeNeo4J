@@ -10,10 +10,12 @@ class TreeNode extends Component {
   constructor(node: NodeType) {
     super();
     this.data = node;
-    this.element = document.createElement('div');
+    this.element = document.createElement('ul');
+    const nodeLi = document.createElement('li');
     this.element.className = 'node';
     const nodeContent = document.createTextNode(node.name);
-    this.element.appendChild(nodeContent);
+    nodeLi.appendChild(nodeContent);
+    this.element.appendChild(nodeLi);
   }
 }
 

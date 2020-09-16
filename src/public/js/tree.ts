@@ -12,7 +12,7 @@ export class Tree extends Component {
 
   constructor(nodes: NodeType[]) {
     super();
-    this.element = document.createElement('div');
+    this.element = document.createElement('ul');
     this.element.className = 'tree';
     this.nodes = nodes;
     this.nodesMap = new Map();
@@ -48,13 +48,28 @@ export class Tree extends Component {
   }
 
   private renderChildrenNodes(treeNode: TreeNode, depth: number = 1) {
+    console.log('!!!!!!!!!!!!!!!!!!!! COMECO !!!!!!!!!!!!!!');
+    console.log('Hora de criar os childs');
+    console.log('treeNode');
+    console.log(treeNode);
     if (this.hasChildren(treeNode)) {
-      const newColumn = this.createColumn();
+      const newColumn = document.createElement('div');
+      // const newColumn = this.createColumn();
+      console.log('this.nodes');
+      console.log(this.nodes);
+      console.log('this.nodesMap');
+      console.log(this.nodesMap);
       treeNode.data.children.map((child: string) => {
+        console.log('child');
+        console.log(child);
         const childData = this.nodesMap.get(child);
+        console.log('childData');
+        console.log(childData);
+        console.log('########### FIM ################');
+
         if (childData) {
           childData.depth = depth;
-          const newNode = this.createNode(childData, newColumn);
+          const newNode = this.createNode(childData, treeNode.element);
           this.renderChildrenNodes(newNode, depth + 1);
         }
       });
@@ -62,11 +77,13 @@ export class Tree extends Component {
   }
 
   public renderTree() {
-    const baseColumn = this.createColumn();
-    const topNodes = this.findTopNodes().map((n: NodeType) => {
-      return this.createNode(n, baseColumn);
-    });
+    // const baseColumn = this.createColumn();
 
+    const topNodes = this.findTopNodes().map((n: NodeType) => {
+      return this.createNode(n);
+    });
+    console.log('topNodes');
+    console.log(topNodes);
     topNodes.map((n: TreeNode) => {
       if (this.hasChildren(n)) {
         this.renderChildrenNodes(n);
