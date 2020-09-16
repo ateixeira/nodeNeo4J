@@ -26,18 +26,10 @@ export class Tree extends Component {
     });
   }
 
-  private createNode(n: NodeType) {
+  private createNode(n: NodeType, target?: HTMLElement) {
     const node = new TreeNode(n);
-    node.render(this.element);
+    node.render(target || this.element);
     return node;
-  }
-
-  private findParent(n: NodeType) {
-    return this.nodes.find((e) => e.children.includes(n.name));
-  }
-
-  private findLeafs() {
-    return this.nodes.filter((e) => !e.children.length);
   }
 
   private findTopNodes() {
@@ -49,19 +41,27 @@ export class Tree extends Component {
   }
 
   private renderChildrenNodes(treeNode: TreeNode, depth: number = 1) {
-    treeNode.data.children.map((child: string) => {
-      const childData = this.nodesMap.get(child);
-      if (childData) {
-        childData.depth = depth;
-        const newNode = this.createNode(childData);
-        this.renderChildrenNodes(newNode, depth + 1);
-      }
-    });
+    if (this.hasChildren(treeNode)) {
+      const newColumn = document.createElement('div');
+      newColumn.className = 'column';
+      this.element.appendChild(newColumn);
+      treeNode.data.children.map((child: string) => {
+        const childData = this.nodesMap.get(child);
+        if (childData) {
+          childData.depth = depth;
+          const newNode = this.createNode(childData, newColumn);
+          this.renderChildrenNodes(newNode, depth + 1);
+        }
+      });
+    }
   }
 
   public renderTree() {
+    const baseColumn = document.createElement('div');
+    baseColumn.className = 'column';
+    this.element.appendChild(baseColumn);
     const topNodes = this.findTopNodes().map((n: NodeType) => {
-      return this.createNode(n);
+      return this.createNode(n, baseColumn);
     });
 
     topNodes.map((n: TreeNode) => {

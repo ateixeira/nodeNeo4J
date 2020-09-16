@@ -1,10 +1,26 @@
+html,
+body {
+  height: 100%;
+}
+
 #app {
   display: flex;
-  justify-content: center;
-  .node {
-    width: 130px;
-    height: 90px;
-    border: 1px solid black;
-    border-radius: 15px 50px;
+  justify-content: flex-end;
+  height: 100%;
+  .tree {
+    display: flex;
+    justify-content: end;
+    .column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 0 3rem;
+      .node {
+        width: 130px;
+        height: 90px;
+        border: 1px solid black;
+        border-radius: 15px 50px;
+      }
+    }
   }
 }
