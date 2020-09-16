@@ -1,11 +1,8 @@
 /* eslint-disable no-undef */
 import Component from './component';
+import { NodeType } from './types';
 
-type NodeType = {
-  name: string;
-};
-
-class Node extends Component {
+class TreeNode extends Component {
   readonly element: HTMLElement;
 
   constructor(node: NodeType) {
@@ -16,4 +13,4 @@ class Node extends Component {
   }
 }
 
-export default Node;
+export default TreeNode;
